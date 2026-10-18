@@ -42,7 +42,7 @@ def test_empty_text_returns_zeros():
 def test_capital_letter_counts_shift_press():
     result = analyze("Hello")
     assert result["characters"] == 5
-    assert result["keystrokes"] == 7
+    assert result["keystrokes"] == 6
     assert result["shift_presses"] == 1
     assert result["counts"]["ShiftLeft"] == 1
     assert result["counts"]["l"] == 2
