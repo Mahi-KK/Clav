@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clav · keyboard heatmap</title>
+  <meta name="description" content="Paste any text and see which keys you would press to type it.">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="page">
+    <header class="masthead">
+      <div>
+        <h1>Clav</h1>
+        <p class="lede">Paste any text and see which keys you would press to type it.</p>
+      </div>
+      <p class="build" title="Set by Jenkins when it builds the Docker image">
+        {% if version == "dev" %}Local build{% else %}Build {{ version }}{% endif %}
+      </p>
+    </header>
+
+    <section class="input" aria-label="Text to analyse">
+      <label for="text">Your text</label>
+      <textarea id="text" rows="4" spellcheck="false"
+                placeholder="Start typing, or load the sample text."></textarea>
+      <div class="actions">
+        <button type="button" id="sample" class="button primary">Load sample</button>
+        <button type="button" id="clear" class="button">Clear</button>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="board" aria-label="Keyboard heatmap">
+      <div class="keyboard" id="keyboard">
+        {% for row in layout %}
+          {% for key_id, label, shifted, width in row %}
+            {% set span = (width * 4) | int %}
+            <div class="key{% if label|length > 1 %} wide{% endif %}"
+                 data-key="{{ key_id }}" data-finger="{{ finger_of[key_id] }}"
+                 style="grid-column: {% if key_id == 'Space' %}19 / {% endif %}span {{ span }}">
+              {% if shifted %}<span class="shifted">{{ shifted }}</span>{% endif %}
+              <span class="label">{{ label }}</span>
+              <span class="count" aria-hidden="true"></span>
+            </div>
+          {% endfor %}
+        {% endfor %}
+      </div>
+      <div class="legend" aria-hidden="true">
+        <span>Fewer presses</span>
+        <span class="scale"></span>
+        <span>More</span>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Typing statistics">
+      <dl>
+        <div><dt>Key presses</dt><dd id="keystrokes">0</dd></div>
+        <div><dt>Characters</dt><dd id="characters">0</dd></div>
+        <div><dt>Shift presses</dt><dd id="shift">0</dd></div>
+        <div><dt>Left / right hand</dt><dd id="hands">0% / 0%</dd></div>
+        <div><dt>On the home row</dt><dd id="home">0%</dd></div>
+      </dl>
+      <div class="top">
+        <h2>Most pressed</h2>
+        <ol id="top-keys"><li class="empty">Nothing typed yet.</li></ol>
+      </div>
+      <p id="unmapped" class="note" hidden></p>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</body>
+</html>

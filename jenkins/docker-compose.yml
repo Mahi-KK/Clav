@@ -1,0 +1,20 @@
+services:
+  jenkins:
+    build: .
+    container_name: clav-jenkins
+    user: root
+    ports:
+      - "8080:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - clav-net
+    restart: unless-stopped
+
+networks:
+  clav-net:
+    name: clav-net
+
+volumes:
+  jenkins_home:
