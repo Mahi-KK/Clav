@@ -1,6 +1,6 @@
 const SAMPLE = `Every push to main runs the Jenkins pipeline: lint, unit tests, a coverage check and a Docker build.
 If all of them pass, Jenkins deploys the new image and this page shows its build number.
-The quick brown fox jumps over the lazy dog!`;
+The quick brown fox runs over the lazy dog!`;
 
 const HOT_TEXT_AT = 0.55;
 
